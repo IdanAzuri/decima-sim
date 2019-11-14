@@ -109,10 +109,10 @@ parser.add_argument('--entropy_weight_decay', type=float, default=1e-3,
                     help='Entropy weight decay rate (default: 1e-3)')
 parser.add_argument('--log_file_name', type=str, default='log',
                     help='log file name (default: log)')
-parser.add_argument('--master_num_gpu', type=int, default=0,
-                    help='Number of GPU cores used in master (default: 0)')
-parser.add_argument('--worker_num_gpu', type=int, default=0,
-                    help='Number of GPU cores used in worker (default: 0)')
+parser.add_argument('--master_num_gpu', type=int, default=1,
+                    help='Number of GPU cores used in master (default: 1)')
+parser.add_argument('--worker_num_gpu', type=int, default=1,
+                    help='Number of GPU cores used in worker (default: 1')
 parser.add_argument('--master_gpu_fraction', type=float, default=0.5,
                     help='Fraction of memory master uses in GPU (default: 0.5)')
 parser.add_argument('--worker_gpu_fraction', type=float, default=0.1,
