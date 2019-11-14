@@ -93,12 +93,12 @@ class ActorAgent(Agent):
         # select node action probability
         self.selected_node_prob = tf.reduce_sum(tf.multiply(
             self.node_act_probs, self.node_act_vec),
-            reduction_indices=1, keep_dims=True)
+            reduction_indices=1, keepdims=True)
 
         # select job action probability
         self.selected_job_prob = tf.reduce_sum(tf.reduce_sum(tf.multiply(
             self.job_act_probs, self.job_act_vec),
-            reduction_indices=2), reduction_indices=1, keep_dims=True)
+            reduction_indices=2), reduction_indices=1, keepdims=True)
 
         # actor loss due to advantge (negated)
         self.adv_loss = tf.reduce_sum(tf.multiply(
