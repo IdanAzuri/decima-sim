@@ -1,6 +1,6 @@
 import os
 # os.environ['CUDA_VISIBLE_DEVICES']=''
-# os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 import time
 import numpy as np
 import tensorflow as tf
@@ -107,7 +107,7 @@ def train_agent(agent_id, param_queue, reward_queue, adv_queue, gradient_queue):
     config = tf.ConfigProto(
         device_count={'GPU': args.worker_num_gpu},
         gpu_options=tf.GPUOptions(
-            per_process_gpu_memory_fraction=args.worker_gpu_fraction, allow_growth=True))
+            per_process_gpu_memory_fraction=args.worker_gpu_fraction))
 
     sess = tf.Session(config=config)
 
