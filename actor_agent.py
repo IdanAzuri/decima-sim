@@ -222,7 +222,7 @@ class ActorAgent(Agent):
             node_outputs = node_outputs + node_valid_mask
 
             # do masked softmax over nodes on the graph
-            node_outputs = tf.nn.softmax(node_outputs, dim=-1)
+            node_outputs = tf.nn.softmax(node_outputs, axis=-1)
 
             # -- part B, the distribution over executor limits --
             merge_job = tf.concat([
@@ -253,7 +253,7 @@ class ActorAgent(Agent):
                 job_outputs, [batch_size, -1, len(self.executor_levels)])
 
             # do masked softmax over jobs
-            job_outputs = tf.nn.softmax(job_outputs, dim=-1)
+            job_outputs = tf.nn.softmax(job_outputs, axis=-1)
 
             return node_outputs, job_outputs
 
