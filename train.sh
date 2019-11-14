@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --mem=40g
-#SBATCH -c 32
+#SBATCH -c 20
 #SBATCH --gres=gpu:4
 #SBATCH --time=1-00
 #SBATCH --priority=TOP
