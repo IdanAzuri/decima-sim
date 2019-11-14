@@ -2,7 +2,7 @@
 
 #SBATCH --mem=40g
 #SBATCH -c 20
-#SBATCH --gres=gpu:4
+#SBATCH --gres=gpu:2
 #SBATCH --time=1-00
 #SBATCH --priority=TOP
 #SBATCH --time-min=1-00
