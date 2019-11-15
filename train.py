@@ -240,8 +240,8 @@ def main():
     # gpu configuration
     config = tf.ConfigProto(
         device_count={'GPU': args.master_num_gpu},
-        gpu_options=tf.GPUOptions(
-            # per_process_gpu_memory_fraction=args.master_gpu_fraction, allow_growth=True)
+        # gpu_options=tf.GPUOptions(
+        #     per_process_gpu_memory_fraction=args.master_gpu_fraction, allow_growth=True)
     )
 
     sess = tf.Session(config=config)
