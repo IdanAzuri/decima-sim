@@ -33,16 +33,16 @@ class GraphCNN(object):
         # initialize message passing transformation parameters
         # h: x -> x'
         self.prep_weights, self.prep_bias = self.init(self.input_dim, self.hid_dims, self.output_dim)
-        self.prep_calibration_factor =  tf.Variable(1)#self.init_factor()
+        self.prep_calibration_factor =  tf.Variable(0.1)#self.init_factor()
 
         # f: x' -> e
         self.proc_weights, self.proc_bias = \
             self.init(self.output_dim, self.hid_dims, self.output_dim)
-        self.proc_calibration_factor =  tf.Variable(1.)
+        self.proc_calibration_factor =  tf.Variable(0.1)
         # g: e -> e
         self.agg_weights, self.agg_bias = \
             self.init(self.output_dim, self.hid_dims, self.output_dim)
-        self.agg_calibration_factor = tf.Variable(1.)
+        self.agg_calibration_factor = tf.Variable(0.1)
         # graph message passing
         self.outputs = self.forward()
 

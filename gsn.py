@@ -35,9 +35,10 @@ class GraphSNN(object):
         # initialize summarization parameters for each hierarchy
         self.dag_weights, self.dag_bias = \
             self.init(self.input_dim, self.hid_dims, self.output_dim)
-
+        self.dag_weights_calibration_factor = tf.Variable(0.1)
         self.global_weights, self.global_bias = \
             self.init(self.output_dim, self.hid_dims, self.output_dim)
+        self.global_weights_calibration_factor = tf.Variable(0.1)
 
         # graph summarization operation
         self.summaries = self.summarize()
@@ -79,7 +80,7 @@ class GraphSNN(object):
         for i in range(len(self.dag_weights)):
             s = tf.matmul(s, self.dag_weights[i])
             s += self.dag_bias[i]
-            s = self.act_fn(s)
+            s = self.act_fn(s) * self.dag_weights_calibration_factor
 
         s = tf.sparse_tensor_dense_matmul(self.summ_mats[0], s) #<=s holds here all the information
         summaries.append(s)
@@ -88,7 +89,7 @@ class GraphSNN(object):
         for i in range(len(self.global_weights)):
             s = tf.matmul(s, self.global_weights[i])
             s += self.global_bias[i]
-            s = self.act_fn(s)
+            s = self.act_fn(s) *self.global_weights_calibration_factor
 
         s = tf.sparse_tensor_dense_matmul(self.summ_mats[1], s)
         summaries.append(s)
