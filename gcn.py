@@ -13,7 +13,6 @@ from tf_op import glorot, ones, zeros
 class GraphCNN(object):
     def __init__(self, inputs, input_dim, hid_dims, output_dim,
                  max_depth, act_fn, scope='gcn'):
-
         self.inputs = inputs
 
         self.input_dim = input_dim
@@ -33,19 +32,25 @@ class GraphCNN(object):
 
         # initialize message passing transformation parameters
         # h: x -> x'
-        self.prep_weights, self.prep_bias = \
-            self.init(self.input_dim, self.hid_dims, self.output_dim)
+        self.prep_weights, self.prep_bias = self.init(self.input_dim, self.hid_dims, self.output_dim)
+        self.prep_calibration_factor =  tf.Variable(1)#self.init_factor()
 
         # f: x' -> e
         self.proc_weights, self.proc_bias = \
             self.init(self.output_dim, self.hid_dims, self.output_dim)
-
+        self.proc_calibration_factor =  tf.Variable(1.)
         # g: e -> e
         self.agg_weights, self.agg_bias = \
             self.init(self.output_dim, self.hid_dims, self.output_dim)
-
+        self.agg_calibration_factor = tf.Variable(1.)
         # graph message passing
         self.outputs = self.forward()
+
+    def init_factor(self):
+        with tf.variable_scope(self.scope):
+            init_range = np.sqrt(6.0)
+            init = tf.random_uniform([1], minval=-init_range, maxval=init_range, dtype=np.float32)
+            tf.Variable(init)
 
     def init(self, input_dim, hid_dims, output_dim):
         # Initialize the parameters
@@ -80,7 +85,7 @@ class GraphCNN(object):
         for l in range(len(self.prep_weights)):
             x = tf.matmul(x, self.prep_weights[l])
             x += self.prep_bias[l]
-            x = self.act_fn(x)
+            x = self.act_fn(x) * [self.prep_calibration_factor]
 
         for d in range(self.max_depth):
             # work flow: index_select -> f -> masked assemble via adj_mat -> g
@@ -90,7 +95,7 @@ class GraphCNN(object):
             for l in range(len(self.proc_weights)):
                 y = tf.matmul(y, self.proc_weights[l])
                 y += self.proc_bias[l]
-                y = self.act_fn(y)
+                y = self.act_fn(y) * self.proc_calibration_factor
 
             # message passing
             y = tf.sparse_tensor_dense_matmul(self.adj_mats[d], y)
@@ -99,7 +104,7 @@ class GraphCNN(object):
             for l in range(len(self.agg_weights)):
                 y = tf.matmul(y, self.agg_weights[l])
                 y += self.agg_bias[l]
-                y = self.act_fn(y)
+                y = self.act_fn(y) * self.agg_calibration_factor
 
             # remove the artifact from the bias term in g
             y = y * self.masks[d]

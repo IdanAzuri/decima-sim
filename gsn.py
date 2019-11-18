@@ -81,7 +81,7 @@ class GraphSNN(object):
             s += self.dag_bias[i]
             s = self.act_fn(s)
 
-        s = tf.sparse_tensor_dense_matmul(self.summ_mats[0], s)
+        s = tf.sparse_tensor_dense_matmul(self.summ_mats[0], s) #<=s holds here all the information
         summaries.append(s)
 
         # global level summary

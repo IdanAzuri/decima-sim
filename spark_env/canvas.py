@@ -36,16 +36,17 @@ def visualize_executor_usage(job_dags, file_path):
     # plt.plot(executor_occupation)
     # plt.fill_between(range(len(executor_occupation)), 0,
     #                  executor_occupation)
+    print(moving_average(executor_occupation, 10000))
     plt.plot(moving_average(executor_occupation, 10000))
 
     plt.ylabel('Number of busy executors')
     plt.title('Executor usage: ' + str(executor_usage) + \
               '\n average completion time: ' + \
-              str(np.mean(job_durations)))
+              str(np.mean(job_durations)/1000))
 
     plt.subplot(2, 1, 2)
     plt.plot(num_jobs_in_system)
-    plt.xlabel('Time (milliseconds)')
+    plt.xlabel('Time (seconds)')
     plt.ylabel('Number of jobs in the system')
 
     fig.savefig(file_path)
@@ -115,9 +116,9 @@ def visualize_dag_time_save_pdf(
     # plt.colorbar()
     # each dag finish time
     for finish_time in dag_finish_time:
-        plt.plot([finish_time, finish_time],
+        plt.plot([finish_time/1000, finish_time/1000],
                  [- 0.5, len(executors) - 0.5], 'r')
-    plt.title('average DAG completion time: ' + str(np.mean(dags_duration)))
+    plt.title('average DAG completion time: ' + str(np.mean(dags_duration)/1000))
     fig.savefig(file_path)
     plt.close(fig)
 

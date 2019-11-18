@@ -108,11 +108,11 @@ def generate_alibaba_jobs(np_random, timeline, wall_time):
 
 
 def generate_tpch_jobs(np_random, timeline, wall_time):
-
+# maybe to add the information of DAG's size (2,5,10,20,50,80,100) and to fit weight for every size to learn in the embeddings
     job_dags = OrderedSet()
     t = 0
 
-    for _ in range(args.num_init_dags):
+    for _ in range(args.num_init_dags): #init dags to warm-up
         # generate query
         query_idx = str(np_random.randint(args.tpch_num) + 1)
         query_size = args.tpch_size[np_random.randint(len(args.tpch_size))]
@@ -124,7 +124,7 @@ def generate_tpch_jobs(np_random, timeline, wall_time):
         job_dag.arrived = True
         job_dags.add(job_dag)
 
-    for _ in range(args.num_stream_dags):
+    for _ in range(args.num_stream_dags): #stream dags actual queries
         # poisson process
         t += int(np_random.exponential(args.stream_interval))
         # uniform distribution
