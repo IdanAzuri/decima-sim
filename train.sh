@@ -12,5 +12,5 @@ module load nvidia
 nvidia-smi
 module load cuda/10.0
 module load tensorflow
-
-python3 train.py --exec_cap 20 --num_init_dags 10 --num_stream_dags 0 --reset_prob 5e-7 --reset_prob_min 5e-8 --reset_prob_decay 4e-10 --diff_reward_enabled 1 --num_agents 16 --model_save_interval 100 --model_folder ./models/baseline/
+git checkout master
+python train.py --exec_cap 20 --num_init_dags 1 --num_stream_dags 30 --reset_prob 5e-7 --reset_prob_min 5e-8 --reset_prob_decay 4e-10 --diff_reward_enabled 1 --num_agents 2 --model_save_interval 100 --model_folder ./models/calibration_v2/
