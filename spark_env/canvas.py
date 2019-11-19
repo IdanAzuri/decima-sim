@@ -10,7 +10,7 @@ def visualize_executor_usage(job_dags, file_path):
 
     job_durations = \
         [job_dag.completion_time - \
-        job_dag.start_time for job_dag in job_dags]
+         job_dag.start_time for job_dag in job_dags]
 
     executor_occupation = np.zeros(exp_completion_time)
     executor_limit = np.ones(exp_completion_time) * args.exec_cap
@@ -21,11 +21,11 @@ def visualize_executor_usage(job_dags, file_path):
         for node in job_dag.nodes:
             for task in node.tasks:
                 executor_occupation[
-                    int(task.start_time) : \
-                    int(task.finish_time)] += 1
+                int(task.start_time) : \
+                int(task.finish_time)] += 1
         num_jobs_in_system[
-            int(job_dag.start_time) : \
-            int(job_dag.completion_time)] += 1
+        int(job_dag.start_time) : \
+        int(job_dag.completion_time)] += 1
 
     executor_usage = \
         np.sum(executor_occupation) / np.sum(executor_limit)
@@ -41,7 +41,7 @@ def visualize_executor_usage(job_dags, file_path):
     plt.ylabel('Number of busy executors')
     plt.title('Executor usage: ' + str(executor_usage) + \
               '\n average completion time: ' + \
-              str(np.mean(job_durations)))
+              str(np.mean(job_durations)/1000) + ' sec')
 
     plt.subplot(2, 1, 2)
     plt.plot(num_jobs_in_system)
@@ -104,7 +104,7 @@ def visualize_dag_time(job_dags, executors, plot_total_time=None, plot_type='sta
 
 def visualize_dag_time_save_pdf(
         job_dags, executors, file_path, plot_total_time=None, plot_type='stage'):
-    
+
     canvas, dag_finish_time, dags_duration = \
         visualize_dag_time(job_dags, executors, plot_total_time, plot_type)
 
@@ -117,7 +117,9 @@ def visualize_dag_time_save_pdf(
     for finish_time in dag_finish_time:
         plt.plot([finish_time, finish_time],
                  [- 0.5, len(executors) - 0.5], 'r')
-    plt.title('average DAG completion time: ' + str(np.mean(dags_duration)))
+    plt.title(f'Average DAG completion time: {np.mean(dags_duration)/1000:2.2f} sec')
+    plt.ylabel("Executors")
+    plt.xlabel("Time(Milliseconds)")
     fig.savefig(file_path)
     plt.close(fig)
 
