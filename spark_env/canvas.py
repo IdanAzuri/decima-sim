@@ -41,7 +41,7 @@ def visualize_executor_usage(job_dags, file_path):
     plt.ylabel('Number of busy executors')
     plt.title('Executor usage: ' + str(executor_usage) + \
               '\n average completion time: ' + \
-              str(np.mean(job_durations)))
+              str(np.mean(job_durations)/1000) + ' sec')
 
     plt.subplot(2, 1, 2)
     plt.plot(num_jobs_in_system)
@@ -117,7 +117,7 @@ def visualize_dag_time_save_pdf(
     for finish_time in dag_finish_time:
         plt.plot([finish_time, finish_time],
                  [- 0.5, len(executors) - 0.5], 'r')
-    plt.title('average DAG completion time: ' + str(np.mean(dags_duration)))
+    plt.title('average DAG completion time: ' + str(np.mean(dags_duration)/1000)+' sec')
     fig.savefig(file_path)
     plt.close(fig)
 
