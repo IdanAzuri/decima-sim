@@ -117,7 +117,7 @@ def visualize_dag_time_save_pdf(
     for finish_time in dag_finish_time:
         plt.plot([finish_time, finish_time],
                  [- 0.5, len(executors) - 0.5], 'r')
-    plt.title('Average DAG completion time: ' + str(np.mean(dags_duration)/1000)+' sec')
+    plt.title(f'Average DAG completion time: {np.mean(dags_duration)/1000:2.2f} sec')
     plt.ylabel("Executors")
     plt.xlabel("Time(Milliseconds)")
     fig.savefig(file_path)
